@@ -14,3 +14,12 @@ Analytics
 Redis caching
 Kafka async logging
 Rate limiting
+
+## Database Design
+
+Stores:
+- original URL
+- short code
+- creation time
+- expiration time
+- click count
