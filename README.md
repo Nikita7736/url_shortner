@@ -15,7 +15,7 @@ Redis caching
 Kafka async logging
 Rate limiting
 
-## Database Design
+Database Design
 
 Stores:
 - original URL
@@ -23,3 +23,6 @@ Stores:
 - creation time
 - expiration time
 - click count
+
+URL Encoding Strategy
+The application uses Base62 encoding to generate compact URL-safe identifiers.
