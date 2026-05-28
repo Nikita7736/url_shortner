@@ -26,3 +26,4 @@ Stores:
 
 URL Encoding Strategy
 The application uses Base62 encoding to generate compact URL-safe identifiers.
+
