@@ -1,0 +1,58 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: urlshortner
+      POSTGRES_USER: urlshortner
+      POSTGRES_PASSWORD: urlshortner
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  app1:
+    build: .
+    environment:
+      SPRING_PROFILES_ACTIVE: redis
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/urlshortner
+      SPRING_DATASOURCE_USERNAME: urlshortner
+      SPRING_DATASOURCE_PASSWORD: urlshortner
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      SERVER_PORT: 8080
+    depends_on:
+      - postgres
+      - redis
+
+  app2:
+    build: .
+    environment:
+      SPRING_PROFILES_ACTIVE: redis
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/urlshortner
+      SPRING_DATASOURCE_USERNAME: urlshortner
+      SPRING_DATASOURCE_PASSWORD: urlshortner
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      SERVER_PORT: 8080
+    depends_on:
+      - postgres
+      - redis
+
+  nginx:
+    image: nginx:1.27
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app1
+      - app2
+
+volumes:
+  pgdata:
+
